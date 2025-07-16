@@ -151,8 +151,8 @@ def test(net, criterion, loader, device):
             test_loss += loss.item()
             _, predicted = torch.max(outputs.data, 1)
 
-            predictions.extend(predicted.numpy())
-            true_labels.extend(targets.numpy())
+            predictions.extend(predicted.cpu().numpy())
+            true_labels.extend(targets.cpu().numpy())
 
             total += targets.size(0)
             correct += predicted.eq(targets.data).cpu().sum()
