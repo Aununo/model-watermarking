@@ -55,7 +55,7 @@ parser.add_argument('--cuda')
 
 args = parser.parse_args()
 
-device = torch.device(args.cuda) if torch.cuda.is_available() else 'cpu'  # cuda:0
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 cwd = os.getcwd()
 
