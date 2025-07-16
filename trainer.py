@@ -69,7 +69,7 @@ def train(epoch, net, criterion, optimizer, train_loader, device, avg_train_loss
         loss = criterion(outputs, targets)
 
         # backward pass: compute gradient of the loss with respect to model parameters
-        loss.backward(retain_graph=True)
+        loss.backward()
         # perform a single optimization step (parameter update)
         optimizer.step()
         # record training loss
