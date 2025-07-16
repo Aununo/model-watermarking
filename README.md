@@ -43,14 +43,12 @@ Such pretrained models can be further used for generating trigger sets using the
 
 ```
 python gen_watermarks.py --save_wm --method FrontierStitching --loadmodel cifar10_custom_cnn --eps 0.25 --dataset cifar10 --trg_set_size 100 --save_file save_results_watermark_generation_frontierstitching.csv
-
 ```
 
 And also for embedding watermarks:
 
 ```
 python embed_watermarks.py  --method FrontierStitching --embed_type augmented --loadmodel cifar10_custom_cnn --dataset cifar10 --num_classes 10 --arch cnn_cifar10  --epochs_w_wm 5 --eps 0.25 --runname frontierstitching_cifar10_custom_cnn --save_file save_results_frontier_stitching_cifar10_cnn.csv --trg_set_sizes_list 100
-
 ```
 This model will be saved to the folder ```checkpoint```  as ```frontierstitching_cifar10_custom_cnn_SGD_MultiStepLR_20.pth```.  
 
@@ -59,5 +57,4 @@ The attacks are performed by running ```attacks.py```. For example, we run the p
 
 ```
 python attack.py --attack_type pruning --pruning_rates 0.2 0.4 0.6 0.8 --method FrontierStitching --trg_set_size 100 --dataset cifar10 --arch cnn_cifar10 --num_classes 10 --batch_size 64 --wm_batch_size 32  --eps 0.25 --save_file save_results_after_pruning.csv --loadmodel frontierstitching_cifar10_custom_cnn_SGD_MultiStepLR_100
-
 ```
