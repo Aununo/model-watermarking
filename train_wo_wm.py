@@ -53,7 +53,7 @@ parser.add_argument('--save_file', default="save_results.csv", help='file for sa
 args = parser.parse_args()
 
 try:
-    device = torch.device(args.cuda) if torch.cuda.is_available() else 'cpu'
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     cwd = os.getcwd()
 
