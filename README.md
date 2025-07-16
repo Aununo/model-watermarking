@@ -1,38 +1,30 @@
 # Implementation of Backdoor-based Model Watermarking methods
+                                                            
+[Official Website & Documentation](https://sbaresearch.github.io/model-watermarking/)
 
-| Argument --method    | Py-file                                | Access paper                                                                                                                                                              | Comments                                                                                                                                            |
-|----------------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| ExponentialWeighting | ./watermarks/exponential_weighting.py  | [Robust Watermarking of Neural Network with Exponential Weighting](https://www.doi.org/10.1145/3321705.3329808)                                                          | In-distribution trigger images, with exponentially weighting layers, needs a pre-trained model                                                      |
-| FrontierStitching    | ./watermarks/frontier_stitching.py     | [Adversarial Frontier Stitching for Remote Neural Network Watermarking](https://www.doi.org/10.1007/s00521-019-04434-z)                                                  | Perturbation-based trigger images, needs a pre-trained model for generating adversarial images                                                      |
-| PiracyResistant      | ./watermarks/piracy_resistant.py       | [Piracy Resistant Watermarks for Deep Neural Networks](http://arxiv.org/abs/1910.01226)                                                                                  | Pattern-based trigger images                                                                                                                        |
-| ProtectingIP         | ./watermarks/protecting_ip.py          | [Protecting Intellectual Property of Deep Neural Networks with Watermarking](https://www.doi.org/10.1145/3196494.3196550)                                                | This paper implements 3 types, which are defined through the --wm_type argument. Choices: 'content' (pattern based), 'unrelated' (OOD), 'noise'     |
-| WeaknessIntoStrength | ./watermarks/weakness_into_strength.py | [Turning Your Weakness Into a Strength: Watermarking Deep Neural Networks by Backdooring](https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-adi.pdf) | OOD trigger images, the trigger images are provided by the authors and stored in ./data/trigger_set/weakness_into_strength/, unfortunately only 100 |
-| WMEmbeddedSystems    | ./watermarks/wm_embedded_systems.py    | [Watermarking deep neural networks for embedded systems](https://www.doi.org/10.1145/3240765.3240862)                                                                    | Pattern-based trigger images                                                                                                                        |
-
-### What is backdoor-based watermarking?
+## What is backdoor-based watermarking?
 Backdoor-based Model Watermarking is a black-box type of watermarking DNNs. The idea is based on backdooring, i.e. the model is trained on additional falsely classified so-called trigger images. 
 
-### How to use
+## How to use
 
-Python version: 3.7.3
+Python version: 3.10.12
 
 Install dependencies by
 
 ```
-pip install -r requirements.txt
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 ```
 
 Run ```embed_watermarks.py``` with arguments specifying the watermarking method, dataset, architecture and more.
 
-For a quick example run
-
-```
-python embed_watermarks.py  --method WeaknessIntoStrength --embed_type fromscratch --dataset cifar10 --num_classes 10 --arch resnet18  --epochs_w_wm 5 --epochs_wo_wm 0 --batch_size 64 --wm_batch_size 32 --lr 0.1 --optim SGD --sched CosineAnnealingLR --patience 20 --runname myfirstrun --save_file save_results.csv --trg_set_sizes_list 20
-```
-
-You will run the WeaknessIntoStrength (```weakness_into_strength.py```) watermarking method on ResNet-18 (```resnet.py```) on the CIFAR-10 dataset, with the trigger set size 20.
-
-The trigger images for this method are stored in data/trigger_images/weakness_into_strength.
+> For a quick example run
+>```
+>python embed_watermarks.py  --method WeaknessIntoStrength --embed_type fromscratch --dataset cifar10 --num_classes 10 --arch resnet18  --epochs_w_wm 5 --epochs_wo_wm 0 --batch_size 64 --wm_batch_size 32 --lr 0.1 --optim SGD --sched CosineAnnealingLR --patience 20 --runname myfirstrun --save_file save_results.csv --trg_set_sizes_list 20
+>```
+>You will run the WeaknessIntoStrength (```weakness_into_strength.py```) watermarking method on ResNet-18 (```resnet.py```) on the CIFAR-10 dataset, with the trigger set size 20.
+>The trigger images for this method are stored in data/>trigger_images/weakness_into_strength.
 
 For all the other methods the trigger images first have to be generated by, e.g., 
 
@@ -66,6 +58,6 @@ This model will be saved to the folder ```checkpoint```  as ```frontierstitching
 The attacks are performed by running ```attacks.py```. For example, we run the pruning attack on the model we trained before with the ```runname``` cifar10_custom_cnn by 
 
 ```
-python attack.py --attack_type pruning --pruning_rates 0.2 0.4 0.6 0.8 --method FrontierStitching --trg_set_size 100 --dataset cifar10 --arch cnn_cifar10 --num_classes 10 --batch_size 64 --wm_batch_size 32  --eps 0.25 --save_file save_results_after_pruning.csv --loadmodel frontierstitching_cifar10_custom_cnn_SGD_MultiStepLR_20
+python attack.py --attack_type pruning --pruning_rates 0.2 0.4 0.6 0.8 --method FrontierStitching --trg_set_size 100 --dataset cifar10 --arch cnn_cifar10 --num_classes 10 --batch_size 64 --wm_batch_size 32  --eps 0.25 --save_file save_results_after_pruning.csv --loadmodel frontierstitching_cifar10_custom_cnn_SGD_MultiStepLR_100
 
 ```
